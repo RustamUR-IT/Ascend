@@ -19,6 +19,9 @@ Themes: **Monarch** (black · violet · white), **Monarch Light** (white · viol
 
 ## 1 · Build the APK (pick one)
 
+**Already built:** every push to `main` publishes the newest APK at
+<https://github.com/RustamUR-IT/Ascend/releases/latest/download/Ascend.apk>. Open that link on your phone to download it.
+
 ### Option A: GitHub (no software to install)
 
 1. Create a free account at github.com and make a **new repository** (it can be private).
