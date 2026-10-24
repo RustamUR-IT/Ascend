@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Ascend</string>
+    <string name="home_name">Ascend Home</string>
+    <string name="ime_name">Ascend Keyboard</string>
+    <string name="shade_name">Ascend Shade</string>
+    <string name="shade_summary">Themed shade, volume panel and screen effects</string>
+    <string name="shade_desc">Ascend uses this permission to show its own pull-down shade when you swipe the status bar, to replace the volume pop-up when you press the volume keys, to lock the screen or take screenshots from its shade, and to draw its HUD frame and unlock animation above other apps. It only listens for which app is open (to leave camera apps\' volume keys alone) and never reads, stores or sends what is on your screen.</string>
+    <string name="wallpaper_name">Ascend</string>
+    <string name="wallpaper_desc">Particle field in your Ascend theme colours</string>
+    <string name="tile_name">Ascend theme</string>
+</resources>
