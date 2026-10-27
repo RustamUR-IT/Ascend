@@ -74,6 +74,11 @@ class ShadeService : AccessibilityService() {
         refreshHud()
     }
 
+    override fun onCreate() {
+        super.onCreate()
+        Fonts.init(this)
+    }
+
     override fun onAccessibilityEvent(event: AccessibilityEvent?) {
         if (event?.eventType == AccessibilityEvent.TYPE_WINDOW_STATE_CHANGED) {
             event.packageName?.toString()?.let { if (it != packageName) foregroundPkg = it }
@@ -134,11 +139,16 @@ class ShadeService : AccessibilityService() {
     fun openShade() {
         h.post {
             if (shade != null) return@post
-            val v = ShadeView(this) { closeShade() }
+            val blur = Prefs.on(this, Prefs.GLASS) && Overlay.canBlur(this)
+            val v = ShadeView(this, blur) { closeShade() }
             val p = Overlay.params(
                 WindowManager.LayoutParams.TYPE_ACCESSIBILITY_OVERLAY, MATCH, MATCH,
                 touchable = true, focusable = true, full = true
             )
+            if (blur && Build.VERSION.SDK_INT >= 31) {
+                p.flags = p.flags or WindowManager.LayoutParams.FLAG_BLUR_BEHIND
+                p.blurBehindRadius = dp(34)
+            }
             if (!Overlay.add(this, v, p)) return@post
             shade = v
             v.animateIn()

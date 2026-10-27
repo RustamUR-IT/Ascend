@@ -37,12 +37,32 @@ fun Context.dpf(v: Float): Float = v * resources.displayMetrics.density
 fun View.dp(v: Int): Int = context.dp(v)
 fun View.dp(v: Float): Int = context.dp(v)
 
+/**
+ * App-wide typefaces. [init] swaps in the bundled fonts (Orbitron for HUD labels, Rajdhani for
+ * headings, keys and the clock); until then, and if loading fails, system fonts are used.
+ */
 object Fonts {
-    val mono: Typeface = Typeface.create(Typeface.MONOSPACE, Typeface.BOLD)
-    val thin: Typeface = Typeface.create("sans-serif-thin", Typeface.NORMAL)
+    var mono: Typeface = Typeface.create(Typeface.MONOSPACE, Typeface.BOLD)      // HUD labels → Orbitron
+        private set
+    var thin: Typeface = Typeface.create("sans-serif-thin", Typeface.NORMAL)     // big clocks → Rajdhani Medium
+        private set
+    var medium: Typeface = Typeface.create("sans-serif-medium", Typeface.NORMAL) // titles, keys → Rajdhani SemiBold
+        private set
     val light: Typeface = Typeface.create("sans-serif-light", Typeface.NORMAL)
-    val medium: Typeface = Typeface.create("sans-serif-medium", Typeface.NORMAL)
-    val regular: Typeface = Typeface.create("sans-serif", Typeface.NORMAL)
+    val regular: Typeface = Typeface.create("sans-serif", Typeface.NORMAL)        // body text stays system
+
+    @Volatile private var loaded = false
+
+    fun init(ctx: Context) {
+        if (loaded) return
+        loaded = true
+        fun load(name: String): Typeface? = try {
+            Typeface.createFromAsset(ctx.assets, "fonts/$name.ttf")
+        } catch (_: Exception) { null }
+        load("orbitron_semibold")?.let { mono = it }
+        load("rajdhani_medium")?.let { thin = it }
+        load("rajdhani_semibold")?.let { medium = it }
+    }
 }
 
 fun Context.text(
@@ -59,7 +79,7 @@ fun Context.text(
 
 /** Small uppercase monospaced label in the accent colour – the "HUD" voice of the app. */
 fun Context.hudLabel(s: String, t: AscendTheme, sp: Float = 11f): TextView =
-    text(s.uppercase(), sp, t.accent, Fonts.mono, 0.16f)
+    text(s.uppercase(), sp * 0.9f, t.accent, Fonts.mono, 0.1f)
 
 fun lp(w: Int, h: Int) = LinearLayout.LayoutParams(w, h)
 

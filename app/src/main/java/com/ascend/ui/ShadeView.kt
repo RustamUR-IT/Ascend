@@ -43,7 +43,7 @@ import kotlin.math.pow
 import kotlin.math.roundToInt
 
 /** The pull-down panel: clock, toggles, brightness, media controls and notifications. */
-class ShadeView(private val svc: ShadeService, private val onClose: () -> Unit) : FrameLayout(svc) {
+class ShadeView(private val svc: ShadeService, private val blurred: Boolean, private val onClose: () -> Unit) : FrameLayout(svc) {
     private val t = Prefs.theme(svc)
     private val h = Handler(Looper.getMainLooper())
     private val scroll = ScrollView(svc)
@@ -64,7 +64,8 @@ class ShadeView(private val svc: ShadeService, private val onClose: () -> Unit) 
     }
 
     init {
-        setBackgroundColor(t.bg.withAlpha(if (t.light) 0xF0 else 0xEC))
+        // With the glass effect the phone blurs everything behind the shade, so the tint can be lighter.
+        setBackgroundColor(t.bg.withAlpha(if (blurred) (if (t.light) 0x9C else 0x8C) else (if (t.light) 0xF0 else 0xEC)))
         isFocusableInTouchMode = true
 
         val outer = LinearLayout(svc).apply { orientation = LinearLayout.VERTICAL }

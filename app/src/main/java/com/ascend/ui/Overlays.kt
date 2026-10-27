@@ -45,6 +45,11 @@ object Overlay {
         return null
     }
 
+    /** True when the phone can blur what's behind an overlay window (Android 12+, if the system allows it). */
+    fun canBlur(ctx: Context): Boolean = Build.VERSION.SDK_INT >= 31 && try {
+        (ctx.getSystemService(Context.WINDOW_SERVICE) as WindowManager).isCrossWindowBlurEnabled
+    } catch (_: Exception) { false }
+
     fun params(type: Int, w: Int, h: Int, touchable: Boolean, focusable: Boolean = false, full: Boolean = false):
         WindowManager.LayoutParams {
         var flags = WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN or WindowManager.LayoutParams.FLAG_HARDWARE_ACCELERATED

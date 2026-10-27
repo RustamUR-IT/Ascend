@@ -119,6 +119,8 @@ class MainActivity : Activity() {
         statusRow.addView(text("$online / 5 MODULES ONLINE", 10.5f, t.textDim, Fonts.mono, 0.12f), lp(WRAP, WRAP).margins(left = dp(12)))
         content.addView(statusRow, lp(MATCH, WRAP).margins(top = dp(18), left = dp(3)))
 
+        crashCard()
+
         themes()
 
         section("Modules")
@@ -142,9 +144,14 @@ class MainActivity : Activity() {
                 Btn(if (enabled) "Enabled ✓" else "1 · Enable", !enabled) { open(Intent(Settings.ACTION_INPUT_METHOD_SETTINGS)) },
                 Btn("2 · Switch to it", enabled && !kbSelected()) { imm().showInputMethodPicker() }
             )
-            choice("Layout", listOf("QWERTY", "QWERTZ"), Prefs.KB_LAYOUT, 0)
+            choice("Layout", listOf("QWERTY", "QWERTZ"), Prefs.KB_LAYOUT, 1)
+            toggle("Word suggestions", "German and English, learns the words you type. Off in password fields.", Prefs.KB_SUGGEST)
             toggle("Number row", null, Prefs.KB_NUMROW)
             toggle("Vibrate on key press", "Follows your system vibration setting", Prefs.KB_HAPTIC)
+            buttons(Btn("Forget learned words", false) {
+                Suggest.forgetLearned(this@MainActivity)
+                toast("Learned words cleared")
+            })
         }
 
         card(
@@ -200,6 +207,12 @@ class MainActivity : Activity() {
                 })
             }
             toggle("Custom shade", null, Prefs.SHADE)
+            toggle(
+                "Glass effect",
+                if (Overlay.canBlur(this@MainActivity)) "Blurs the screen behind the shade"
+                else "Needs Android 12+ with window blur on (Developer options → Allow window-level blurs)",
+                Prefs.GLASS
+            )
             choice("Swipe zone on the status bar", listOf("Left half", "Right half", "Full width"), Prefs.SHADE_ZONE, 1)
             addView(text("Swiping the other half still opens Nothing's own panel.", 12f, t.textDim),
                 lp(MATCH, WRAP).margins(top = dp(6)))
@@ -239,11 +252,32 @@ class MainActivity : Activity() {
         section("Everywhere else")
         tips()
 
-        content.addView(text("Ascend 1.0 · no root · nothing leaves your phone", 10f, t.textDim, Fonts.mono, 0.08f).apply {
+        content.addView(text("Ascend 1.1 · no root · nothing leaves your phone", 10f, t.textDim, Fonts.mono, 0.08f).apply {
             gravity = Gravity.CENTER
         }, lp(MATCH, WRAP).margins(top = dp(30)))
 
         scroll.post { scroll.scrollTo(0, y) }
+    }
+
+    /** Shown only after a crash: lets the user send the error text to whoever fixes the app. */
+    private fun crashCard() {
+        val log = CrashLog.read(this) ?: return
+        card("Last crash", null, "Ascend crashed. Share this report so it can be fixed.") {
+            addView(text(log.lineSequence().drop(4).take(6).joinToString("\n"), 11f, t.textDim, Fonts.regular).apply {
+                typeface = android.graphics.Typeface.MONOSPACE
+                setPadding(dp(12), dp(10), dp(12), dp(10))
+                background = roundRect(t.bg, dpf(10f), t.accent.withAlpha(0x40), dp(1))
+            }, lp(MATCH, WRAP).margins(top = dp(12)))
+            buttons(
+                Btn("Share report", true) {
+                    val send = Intent(Intent.ACTION_SEND).setType("text/plain")
+                        .putExtra(Intent.EXTRA_SUBJECT, "Ascend crash report")
+                        .putExtra(Intent.EXTRA_TEXT, log)
+                    open(Intent.createChooser(send, "Share crash report"))
+                },
+                Btn("Dismiss", false) { CrashLog.clear(this@MainActivity); build() }
+            )
+        }
     }
 
     private fun themes() {
