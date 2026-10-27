@@ -80,12 +80,15 @@ object Prefs {
     const val KB_LAYOUT = "kb_layout"     // 0 QWERTY, 1 QWERTZ
     const val KB_HAPTIC = "kb_haptic"
     const val KB_NUMROW = "kb_numrow"
+    const val KB_SUGGEST = "kb_suggest"
+    const val GLASS = "glass"
     const val DOCK = "dock"
 
     /** Defaults for boolean settings. */
     private val defaults = mapOf(
         POPUPS to true, EDGE_GLOW to true, CHARGE_GLOW to true, HUD to false,
-        VOLUME to true, SHADE to true, UNLOCK to true, KB_HAPTIC to true, KB_NUMROW to true
+        VOLUME to true, SHADE to true, UNLOCK to true, KB_HAPTIC to true, KB_NUMROW to true,
+        KB_SUGGEST to true, GLASS to true
     )
 
     fun sp(ctx: Context): SharedPreferences =

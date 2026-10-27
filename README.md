@@ -7,9 +7,9 @@ A themed "system interface" for Android that works **without root**. Built for t
 | Module | What you get |
 |---|---|
 | **Home screen** | Clock, a "status window" (battery, day progress, notifications), a 5-app dock and an app drawer with restyled icons (Line / Orb / Original). Swipe up for apps, swipe down for the shade, double-tap to lock, long-press empty space for settings. |
-| **Keyboard** | Fully themed keyboard for every app (WhatsApp, Chrome, …). QWERTY or QWERTZ, number row, symbols, emoji page, long-press for ä ö ü ß é, double-space for a full stop. |
+| **Keyboard** | Fully themed keyboard for every app (WhatsApp, Chrome, …) with glowing glass keys, a key preview bubble and a suggestion bar (German + English, learns your words, off in password fields). QWERTZ or QWERTY, number row, symbols, emoji page, long-press for ä ö ü ß é, double-space for a full stop. |
 | **Notifications** | New notifications slide in as themed notices, plus an edge glow around the screen. |
-| **Shade & volume** | Swipe down on the status bar for a themed shade: Wi-Fi, Bluetooth, torch, Focus (DND), rotation, screenshot, lock, power menu, brightness, media controls and your notifications. Volume keys show a themed slider. Optional HUD frame and "system online" unlock animation. |
+| **Shade & volume** | Swipe down on the status bar for a themed shade: Wi-Fi, Bluetooth, torch, Focus (DND), rotation, screenshot, lock, power menu, brightness, media controls and your notifications. Volume keys show a themed slider. Glass effect blurs the screen behind the shade (Android 12+). Optional HUD frame and "system online" unlock animation. |
 | **Live wallpaper** | Animated particles and grid in your theme. Android reads its colours, so the system accent (quick settings, Chrome, Google apps) follows your theme. |
 | **Quick tile** | Cycle themes from quick settings. |
 
@@ -68,6 +68,15 @@ Then finish the rest of the system with the tips shown at the bottom of the app 
 - **Privacy**: Ascend has no internet permission. Notifications are only drawn on screen; nothing is stored or sent.
 - **Turning things off**: every effect has a switch in the app. To stop everything, set another home app, keyboard and wallpaper and switch Ascend off in Accessibility.
 
+## If something breaks
+
+After a crash, the Ascend screen shows a **Last crash** card. Tap **Share report** and send the text to whoever maintains the app.
+
+## Credits
+
+- Fonts: [Rajdhani](https://github.com/google/fonts/tree/main/ofl/rajdhani) and [Orbitron](https://github.com/google/fonts/tree/main/ofl/orbitron), SIL Open Font License (see `app/src/main/assets/fonts`).
+- Word lists: [FrequencyWords](https://github.com/hermitdave/FrequencyWords) by Hermit Dave, CC BY-SA 4.0. German noun capitalisation checked against the [igerman98 / frami](https://github.com/LibreOffice/dictionaries/tree/master/de) Hunspell dictionary.
+
 ## Project layout
 
 ```
@@ -79,6 +88,8 @@ app/src/main/java/com/ascend/ui/
   AppRepo.kt          app list + icon restyling
   KeyboardService.kt  keyboard typing logic
   KeyboardView.kt     keyboard drawing + touch
+  Suggest.kt          word suggestions + learned words
+  AscendApp.kt        app start-up, fonts, crash log
   NotifyListener.kt   reads notifications
   Overlays.kt         pop-ups, edge glow, HUD frame, unlock splash, volume panel
   ShadeService.kt     accessibility service (swipe zone, volume keys, effects)
