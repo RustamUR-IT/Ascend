@@ -237,7 +237,8 @@ class SegBar(ctx: Context, private val t: AscendTheme, private val segments: Int
     }
 }
 
-enum class Glyph { WIFI, BLUETOOTH, TORCH, DND, ROTATE, SCREENSHOT, LOCK, POWER, GEAR, CLOSE, PLAY, PAUSE, PREV, NEXT, SEARCH, BRIGHT, GRID }
+enum class Glyph { WIFI, BLUETOOTH, TORCH, DND, ROTATE, SCREENSHOT, LOCK, POWER, GEAR, CLOSE, PLAY, PAUSE, PREV, NEXT, SEARCH, BRIGHT, GRID,
+    SUN, CLOUD, RAIN, SNOW, STORM, FOG, CHECK, EDIT }
 
 /** Simple line icons drawn in code on a 24×24 grid, so they take the theme colour exactly. */
 class GlyphView(ctx: Context, private var glyph: Glyph, private var color: Int) : View(ctx) {
@@ -338,6 +339,42 @@ class GlyphView(ctx: Context, private var glyph: Glyph, private var color: Int) 
                         12f + 9f * cos(a).toFloat(), 12f + 9f * sin(a).toFloat(), p
                     )
                 }
+            }
+            Glyph.SUN -> {
+                c.drawCircle(12f, 12f, 4.5f, p)
+                for (i in 0 until 8) {
+                    val a = Math.toRadians(i * 45.0)
+                    c.drawLine(
+                        12f + 7.5f * cos(a).toFloat(), 12f + 7.5f * sin(a).toFloat(),
+                        12f + 10f * cos(a).toFloat(), 12f + 10f * sin(a).toFloat(), p
+                    )
+                }
+            }
+            Glyph.CLOUD, Glyph.RAIN, Glyph.SNOW, Glyph.STORM -> {
+                val top = if (glyph == Glyph.CLOUD) 2f else -2f
+                path.moveTo(7f, 17f + top)
+                r.set(3f, 10.5f + top, 10f, 17.5f + top); path.arcTo(r, 90f, 180f)
+                r.set(7f, 5f + top, 16f, 14f + top); path.arcTo(r, 200f, 150f)
+                r.set(14f, 9.5f + top, 21f, 17f + top); path.arcTo(r, 270f, 180f)
+                path.close()
+                c.drawPath(path, p)
+                when (glyph) {
+                    Glyph.RAIN -> { c.drawLine(9f, 18.5f, 8f, 21.5f, p); c.drawLine(13f, 18.5f, 12f, 21.5f, p); c.drawLine(17f, 18.5f, 16f, 21.5f, p) }
+                    Glyph.SNOW -> { p.style = Paint.Style.FILL; for (x in floatArrayOf(8.5f, 12.5f, 16.5f)) c.drawCircle(x, 20f, 1.1f, p) }
+                    Glyph.STORM -> { path.reset(); path.moveTo(13f, 17f); path.lineTo(10.5f, 20.5f); path.lineTo(13.5f, 20.5f); path.lineTo(11f, 23.5f); c.drawPath(path, p) }
+                    else -> {}
+                }
+            }
+            Glyph.FOG -> {
+                c.drawLine(4f, 8f, 20f, 8f, p); c.drawLine(6f, 12f, 18f, 12f, p); c.drawLine(4f, 16f, 20f, 16f, p)
+            }
+            Glyph.CHECK -> {
+                p.strokeWidth = 2.6f
+                path.moveTo(5f, 12.5f); path.lineTo(10f, 17.5f); path.lineTo(19.5f, 7f); c.drawPath(path, p)
+            }
+            Glyph.EDIT -> {
+                path.moveTo(4f, 20f); path.lineTo(4.8f, 16f); path.lineTo(15.5f, 5.3f); path.lineTo(18.7f, 8.5f)
+                path.lineTo(8f, 19.2f); path.close(); c.drawPath(path, p)
             }
             Glyph.GRID -> {
                 for ((x, y) in listOf(4f to 4f, 14f to 4f, 4f to 14f, 14f to 14f)) {

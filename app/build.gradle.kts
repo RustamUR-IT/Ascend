@@ -11,8 +11,8 @@ android {
         applicationId = "com.ascend.ui"
         minSdk = 26
         targetSdk = 35
-        versionCode = 2
-        versionName = "1.1"
+        versionCode = 3
+        versionName = "1.2"
     }
 
     // A fixed key, so every new build installs over the previous one without uninstalling.
