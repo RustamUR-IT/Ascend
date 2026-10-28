@@ -49,11 +49,16 @@ class MainActivity : Activity() {
         }
         content = LinearLayout(this).apply { orientation = LinearLayout.VERTICAL }
         scroll.addView(content)
-        setContentView(scroll)
+        val frame = android.widget.FrameLayout(this)
+        frame.addView(scroll, android.widget.FrameLayout.LayoutParams(MATCH, MATCH))
+        val scrim = View(this).apply { setBackgroundColor(t.bg.withAlpha(0xF2)) }
+        frame.addView(scrim, android.widget.FrameLayout.LayoutParams(MATCH, 0))
+        setContentView(frame)
         window.decorView.setBackgroundColor(t.bg)
         edgeToEdge(window, t.light)
-        scroll.setOnApplyWindowInsetsListener { _, ins ->
+        frame.setOnApplyWindowInsetsListener { _, ins ->
             val (top, bottom) = barInsets(ins)
+            scrim.layoutParams = scrim.layoutParams.apply { height = top }
             content.setPadding(dp(18), top + dp(22), dp(18), bottom + dp(30))
             ins
         }
@@ -127,8 +132,8 @@ class MainActivity : Activity() {
 
         card(
             "Home screen", home,
-            "Clock, status window, a dock for 5 apps and a drawer with restyled icons. " +
-                "Swipe up for apps, swipe down for the shade, double-tap to lock, long-press empty space to open this screen."
+            "Three pages: Monarch minimal, Status window (level, XP, daily quests) and Gate grid (weather, calendar, music). " +
+                "Swipe sideways between pages, up for all apps, down for the shade. Double-tap empty space to lock, long-press it to open this screen."
         ) {
             buttons(Btn(if (home) "Change home app" else "Set as home app", !home) { open(Intent(Settings.ACTION_HOME_SETTINGS)) })
             choice("Icon style", listOf("Line", "Orb", "Original"), Prefs.ICON_STYLE, 0)
@@ -252,7 +257,7 @@ class MainActivity : Activity() {
         section("Everywhere else")
         tips()
 
-        content.addView(text("Ascend 1.1 · no root · nothing leaves your phone", 10f, t.textDim, Fonts.mono, 0.08f).apply {
+        content.addView(text("Ascend 1.2 · no root · only weather goes online", 10f, t.textDim, Fonts.mono, 0.08f).apply {
             gravity = Gravity.CENTER
         }, lp(MATCH, WRAP).margins(top = dp(30)))
 

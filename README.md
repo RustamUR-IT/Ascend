@@ -6,7 +6,7 @@ A themed "system interface" for Android that works **without root**. Built for t
 
 | Module | What you get |
 |---|---|
-| **Home screen** | Clock, a "status window" (battery, day progress, notifications), a 5-app dock and an app drawer with restyled icons (Line / Orb / Original). Swipe up for apps, swipe down for the shade, double-tap to lock, long-press empty space for settings. |
+| **Home screen** | Three swipeable pages. **Status window** (main): clock, weather, level, XP bar, stats and daily quests you tick off. **Monarch minimal** (left): huge clock, favourite apps as a glowing list, A–Z strip. **Gate grid** (right): weather, today's calendar, battery ring, music controls, more favourites and search. Swipe up for all apps, down for the shade, double-tap to lock, long-press empty space for settings. Long-press any app → *Zu Favoriten* (first 5 go in the dock). |
 | **Keyboard** | Fully themed keyboard for every app (WhatsApp, Chrome, …) with glowing glass keys, a key preview bubble and a suggestion bar (German + English, learns your words, off in password fields). QWERTZ or QWERTY, number row, symbols, emoji page, long-press for ä ö ü ß é, double-space for a full stop. |
 | **Notifications** | New notifications slide in as themed notices, plus an edge glow around the screen. |
 | **Shade & volume** | Swipe down on the status bar for a themed shade: Wi-Fi, Bluetooth, torch, Focus (DND), rotation, screenshot, lock, power menu, brightness, media controls and your notifications. Volume keys show a themed slider. Glass effect blurs the screen behind the shade (Android 12+). Optional HUD frame and "system online" unlock animation. |
@@ -65,7 +65,8 @@ Then finish the rest of the system with the tips shown at the bottom of the app 
 - **Other apps' insides can't be restyled without root.** WhatsApp chats and web pages keep their own design; the keyboard, pop-ups, shade, volume panel, home screen and system accent around them are what Ascend changes.
 - **Nothing's own panel still works**: swipe the *other* half of the status bar (configurable), or tap *System panel* at the bottom of the Ascend shade.
 - **Battery**: the live wallpaper only animates while visible. Expect a few percent per day overall.
-- **Privacy**: Ascend has no internet permission. Notifications are only drawn on screen; nothing is stored or sent.
+- **Privacy**: the only thing that goes online is the weather: your chosen city name is sent to Open-Meteo. Notifications are only drawn on screen. Steps, quests, XP and calendar data stay on the phone.
+- **Levels**: each finished quest gives 50 XP, every 100 steps 1 XP (max 100 a day), all quests done +100 XP and a longer streak. Tap the status window to change your name, the pencil to edit quests, the weather to change the city.
 - **Turning things off**: every effect has a switch in the app. To stop everything, set another home app, keyboard and wallpaper and switch Ascend off in Accessibility.
 
 ## If something breaks
