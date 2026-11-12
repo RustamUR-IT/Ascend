@@ -43,7 +43,7 @@ Themes: **Monarch** (black · violet · white), **Monarch Light** (white · viol
 2. Allow "Install unknown apps" for the app you opened it from.
 3. Play Protect may warn that it doesn't recognise the app. Tap **More details → Install anyway**. This is normal for apps you build yourself.
 
-Updating later: build again and install over the top. Your settings stay, because every build uses the same signing key (`app/ascend.jks`).
+Updating later: build again and install over the top. Your settings stay, because every build uses the same signing key. The key is not in the repo: GitHub Actions restores it from repository secrets, and a local build reads it from the `RELEASE_KEYSTORE_FILE`, `RELEASE_KEYSTORE_PASSWORD`, `RELEASE_KEY_ALIAS` and `RELEASE_KEY_PASSWORD` environment variables.
 
 ## 3 · Set it up (in this order)
 
