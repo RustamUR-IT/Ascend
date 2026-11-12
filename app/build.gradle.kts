@@ -16,22 +16,35 @@ android {
     }
 
     // A fixed key, so every new build installs over the previous one without uninstalling.
+    // The key and its passwords never live in the repo: they come from environment
+    // variables (GitHub Actions secrets in CI). Without them, debug builds fall back to
+    // the standard Android debug key and release builds stay unsigned.
+    val releaseKeystoreFile = System.getenv("RELEASE_KEYSTORE_FILE")
+    val releaseKeystorePassword = System.getenv("RELEASE_KEYSTORE_PASSWORD")
+    val releaseKeyAlias = System.getenv("RELEASE_KEY_ALIAS")
+    val releaseKeyPassword = System.getenv("RELEASE_KEY_PASSWORD")
+    val hasReleaseSigning = listOf(
+        releaseKeystoreFile, releaseKeystorePassword, releaseKeyAlias, releaseKeyPassword
+    ).none { it.isNullOrBlank() }
+
     signingConfigs {
-        create("ascend") {
-            storeFile = file("ascend.jks")
-            storePassword = "***REMOVED***"
-            keyAlias = "ascend"
-            keyPassword = "***REMOVED***"
+        if (hasReleaseSigning) {
+            create("release") {
+                storeFile = file(releaseKeystoreFile!!)
+                storePassword = releaseKeystorePassword
+                keyAlias = releaseKeyAlias
+                keyPassword = releaseKeyPassword
+            }
         }
     }
 
     buildTypes {
         release {
             isMinifyEnabled = false
-            signingConfig = signingConfigs.getByName("ascend")
+            if (hasReleaseSigning) signingConfig = signingConfigs.getByName("release")
         }
         debug {
-            signingConfig = signingConfigs.getByName("ascend")
+            if (hasReleaseSigning) signingConfig = signingConfigs.getByName("release")
         }
     }
 

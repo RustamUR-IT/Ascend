@@ -6,3 +6,10 @@ local.properties
 *.iml
 .DS_Store
 captures/
+
+# Signing keys and their passwords never belong in the repo
+*.jks
+*.keystore
+*.p12
+*.password.txt
+keystore.properties
